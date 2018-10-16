@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import smtplib
+import pandas
 from email.mime.text import MIMEText
 from email.header import Header
 from email.utils import formatdate
@@ -42,9 +43,9 @@ def setup(addressBook, names, emails):
         index += 1
 
 def organize():
-    book = Info()
-    names = book.names.splitlines()
-    emails = book.emails.splitlines()
+    data = pandas.read_csv('./sample.csv')
+    names = data['Name'].tolist()
+    emails = data['To Email Address'].tolist()
     addressBook = dict()
     setup(addressBook, names, emails)
     return addressBook
