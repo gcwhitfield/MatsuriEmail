@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 import smtplib
 import pandas
+import csv
 from email.mime.text import MIMEText
 from email.header import Header
 from email.utils import formatdate
-from names.names import Info
 
 EMAIL_ADDRESS = 'your_email_adress@xyz.com'
 PASSWORD      = 'your_password'
@@ -16,23 +16,16 @@ PASSWORD      = 'your_password'
 ###### 1.) Modify line EMAIL_ADDRESS and PASSWORD above 
 ######     ----> account has to be configured on gmail to permit 3rd party access
 ######
-###### 2.) Go to names.py in names folder
+###### 2.) Place the CSV file with the information in the same directory as this file
 ######
-###### 3.) Go to downloaded .csv file
+###### 3.) Edit subject
 ######
-###### 4.) Copy and paste names column to self.names, emails to self.emails
-######     ----> Has to be in correct order (sorted) from spreadsheet
-######     ----> e.g. first name in self.names should correspond to
-######                first email in self.emails
+###### 4.) Edit messages (bodyEN in English and bodyJP in Japanese)
 ######
-###### 5.) Edit subject
-######
-###### 6.) Edit messages (bodyEN in English and bodyJP in Japanese)
-######
-###### 7.) uncomment run() at the very bottom of this file, then run
+###### 5.) uncomment run() at the very bottom of this file, then run
 
 
-###### * TEST WITH YOUR OWN NAME AND EMAIL ADDRESS IN names.py FIRST!!*
+###### * TEST WITH YOUR OWN NAME AND EMAIL ADDRESS FIRST!!*
 
 ##########################################################
 
@@ -43,9 +36,18 @@ def setup(addressBook, names, emails):
         index += 1
 
 def organize():
-    data = pandas.read_csv('./sample.csv')
-    names = data['Name'].tolist()
-    emails = data['To Email Address'].tolist()
+    with open('sample.CSV', 'rU') as info:
+        reader = csv.DictReader(info)
+        data = {}
+        for row in reader:
+            for header, value in row.items():
+                try:
+                    data[header].append(value)
+                except KeyError:
+                    data[header] = [value]
+
+    names = data['Name']
+    emails = data['From Email Address']
     addressBook = dict()
     setup(addressBook, names, emails)
     return addressBook
@@ -113,4 +115,4 @@ Matsuri website: https://matsuri.cmujsa.com\n\n" % recepientName
         
         print (recepientName + "  sent!")
 
-# run()
+#run()
