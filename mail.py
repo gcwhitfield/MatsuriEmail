@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 import smtplib
-import pandas
 import csv
+import os
+import glob
 from email.mime.text import MIMEText
 from email.header import Header
 from email.utils import formatdate
@@ -35,22 +36,37 @@ def setup(addressBook, names, emails):
         addressBook[name] = emails[index]
         index += 1
 
-def organize():
-    with open('sample.CSV', 'rU') as info:
-        reader = csv.DictReader(info)
-        data = {}
-        for row in reader:
-            for header, value in row.items():
-                try:
-                    data[header].append(value)
-                except KeyError:
-                    data[header] = [value]
+def check_csv():
+    ext1 = 'CSV'
+    ext2 = 'csv'
+    CSV = [i for i in glob.glob('*.{}'.format(ext1))]
+    csv = [i for i in glob.glob('*.{}'.format(ext2))]
 
-    names = data['Name']
-    emails = data['From Email Address']
-    addressBook = dict()
-    setup(addressBook, names, emails)
-    return addressBook
+    if (len(CSV)==0):
+        if (len(csv)==0):
+            return ""
+        else:
+            return csv[0]
+    else:
+        return CSV[0]   
+
+def organize(fileName):
+    if (fileName != ""):
+        with open(fileName, 'rU') as info:
+            reader = csv.DictReader(info)
+            data = {}
+            for row in reader:
+                for header, value in row.items():
+                    try:
+                        data[header].append(value)
+                    except KeyError:
+                        data[header] = [value]
+
+        names = data['Name']
+        emails = data['From Email Address']
+        addressBook = dict()
+        setup(addressBook, names, emails)
+        return addressBook
 
 def create_message(from_addr, to_addr, subject, body, encoding):
     msg = MIMEText(body, 'plain', encoding)
@@ -70,8 +86,13 @@ def send_via_gmail(from_addr, to_addr, msg):
     s.close()
 
 def run():
-    book = organize()
-
+    data = check_csv()
+    if(data == ""):
+        print("No file found in directory")
+        return 
+        
+    book = organize(data)
+    
     for recepientName in book:
         
         if recepientName == "":
@@ -111,8 +132,8 @@ Matsuri website: https://matsuri.cmujsa.com\n\n" % recepientName
         
         msg = create_message(from_addr, to_addr, subject, bodyEN+textBreak+bodyJP,'ISO-2022-JP')
         
-        send_via_gmail(from_addr, to_addr, msg)
+        #send_via_gmail(from_addr, to_addr, msg)
         
         print (recepientName + "  sent!")
 
-#run()
+run()
