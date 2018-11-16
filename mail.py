@@ -17,7 +17,7 @@ PASSWORD      = 'your_password'
 ###### 1.) Modify line EMAIL_ADDRESS and PASSWORD above 
 ######     ----> account has to be configured on gmail to permit 3rd party access
 ######
-###### 2.) Place the CSV file with the information in the same directory as this file
+###### 2.) Place the CSV file or CSV files with the information in the same directory as this file
 ######
 ###### 3.) Edit subject
 ######
@@ -55,7 +55,7 @@ def check_csv():
 
 def organize(fileName):
     if (fileName != ""):
-        with open(fileName, 'rU') as info:
+        with open(fileName, 'rU', encoding='utf8') as info:
             reader = csv.DictReader(info)
             data = {}
             for row in reader:
@@ -136,8 +136,8 @@ def run():
             
             msg = create_message(from_addr, to_addr, subject, bodyEN+textBreak+bodyJP,'ISO-2022-JP')
             
-            send_via_gmail(from_addr, to_addr, msg)
+            #send_via_gmail(from_addr, to_addr, msg)
             
             print (recepientName + "  sent!")
 
-#run()
+run()
