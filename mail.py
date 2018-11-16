@@ -90,11 +90,10 @@ def send_via_gmail(from_addr, to_addr, msg):
 
 def run():
     data = check_csv()
-    for i in data:
-        if(data == ""):
+    if(data == ""):
             print("No file found in directory")
             return 
-            
+    for i in data:
         book = organize(i)
         
         for recepientName in book:
@@ -136,8 +135,8 @@ def run():
             
             msg = create_message(from_addr, to_addr, subject, bodyEN+textBreak+bodyJP,'ISO-2022-JP')
             
-            #send_via_gmail(from_addr, to_addr, msg)
+            send_via_gmail(from_addr, to_addr, msg)
             
             print (recepientName + "  sent!")
 
-run()
+#run()
