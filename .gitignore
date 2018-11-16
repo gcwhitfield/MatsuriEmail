@@ -101,5 +101,5 @@ ENV/
 .mypy_cache/
 
 # csv files - NO CLIENT INFO SHOULD BE EXPOSED
-.csv
-.CSV
+*.csv
+*.CSV
