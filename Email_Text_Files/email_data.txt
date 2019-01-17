@@ -1,0 +1,44 @@
+
+# ########## EMAIL SUBJECT LINE ######### #*
+Matsuri 2018 Ticket Information //「祭」チケットについて
+*# ########## BODY ENG ############ #*
+Dear RECIPIENT_NAME,
+
+Hello!
+
+You are receiving this message because you have purchased a ticket for Matsuri last year.
+
+We are excited to invite you back to the flagship event of the Japanese Student Association, MATSURI.
+
+The event will be held on the 10th of April (Tuesday) this year. We hope to deliver the uniqueness of Japanese culture in the Wiegand Gym this year!
+
+With that being said, we would like to announce the release of the online tickets for Matsuri 2018, and offer you the notification of details.
+    - Tickets preordered online will have a 10 percent discount
+    - Tickets can be picked up at a booth during the event without queueing
+    - Tickets can be ordered via https://cmujsa.com/matsuri/tickets/
+
+For questions or more information about the event, please contact rkhorana@cmu.edu (JSA President)
+
+We hope you come back and enjoy the event with us!
+
+Matsuri website: https://matsuri.cmujsa.com
+
+*# ######### BODY JP ######### #*
+RECIPIENT_NAME様、
+
+こんにちは！
+
+昨年カーネギーメロン大学で開催された「祭」というイベントでチケットをオンライン予約購入していただいた方にメールを送らせていただいております。
+
+今年度は4月10日（火）に「祭」を開催することになりました。
+
+つきましては、昨年大変お世話になりました皆様に２０１８年度オンラインチケット予約のご案内をさせていただきます。
+    - オンライン予約されたチケットはすべて10パーセント割引とさせて頂きます
+    - 当日、予約されたチケットは別カウンターにて待ち時間０でお手渡し致します
+    - チケット予約はこちらから https://cmujsa.com/matsuri/tickets/
+
+ご質問等ございましたら rkhorana@cmu.edu (JSA会長) までよろしくお願い致します。
+
+「祭」でお会いしましょう！
+
+祭ウェブサイト：https://matsuri.cmujsa.com

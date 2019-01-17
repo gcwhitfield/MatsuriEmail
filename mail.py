@@ -9,8 +9,10 @@ from email.mime.text import MIMEText
 from email.header import Header
 from email.utils import formatdate
 
-EMAIL_ADDRESS = 'your_email_adress@xyz.com'
-PASSWORD      = 'your_password'
+EMAIL_ADDRESS = input("Please type your email address username: ")
+PASSWORD      = input("Please type your email password: ")
+
+EMAIL_DATA_FILEPATH = 'Email_Text_Files/email_data.txt'
 
 ##########################################################
 
@@ -31,6 +33,23 @@ PASSWORD      = 'your_password'
 ###### * TEST WITH YOUR OWN NAME AND EMAIL ADDRESS FIRST!!*
 
 ##########################################################
+
+# copied from the 15-112 website
+def readFile(path):
+    with open(path, "rt") as f:
+        return f.read()
+
+def get_email_data(datafilepath):
+    data = readFile(EMAIL_DATA_FILEPATH)
+    step1 = data.split('*')
+    subject = step1[1]
+    # remove the \n from the subject line
+    subject = subject.replace('\n', '')
+    engBody = step1[3]
+    engBody = engBody.strip() # get rid of trailing whitespace
+    jpBody = step1[5]
+    jpBody = jpBody.strip() # get rid of trailing whitespace
+    return subject, engBody, jpBody
 
 def setup(addressBook, names, emails):
     index = 0
@@ -102,34 +121,16 @@ def run():
 
             from_addr = EMAIL_ADDRESS
             to_addr = book[recepientName]
-            subject = "Matsuri 2018 Ticket Infromation //「祭」チケットについて"
+            email_data = get_email_data(EMAIL_DATA_FILEPATH)
+            subject = email_data[0]
 
-            bodyEN = "Dear %s, \n\n\
-Hello!\n\n\
-You are receiving this message because you have purchased a ticket for Matsuri last year. \n\n\
-We are excited to invite you back to the flagship event of the Japanese Student Association, MATSURI.\n\n\
-The event will be held on the 10th of April (Tuesday) this year. We hope to deliver the uniqueness of Japanese culture in the Wiegand Gym this year!\n\n\
-With that being said, we would like to announce the release of the online tickets for Matsuri 2018, and offer you the notification of details. \n\n\
-    - Tickets preordered online will have a 10 percent discount\n\
-    - Tickets can be picked up at a booth during the event without queueing\n\
-    - Tickets can be ordered via https://cmujsa.com/matsuri/tickets/\n\n\
-For questions or more information about the event, please contact rkhorana@cmu.edu (JSA President) \n\n\
-We hope you come back and enjoy the event with us! \n\n\
-Matsuri website: https://matsuri.cmujsa.com\n\n" % recepientName
+            bodyEN = email_data[1]
+            bodyEN.replace('RECIPIENT_NAME', recepientName)
+
+            bodyJP = email_data[2]
+            bodyJP.replace('RECIPIENT_NAME', recepientName)
 
             textBreak = "---------------------------------------------------------------------------------\n\n"
-
-            bodyJP = "%s様、 \n\n\
-こんにちは！\n\n\
-昨年カーネギーメロン大学で開催された「祭」というイベントでチケットをオンライン予約購入していただいた方にメールを送らせていただいております。 \n\n\
-今年度は4月10日（火）に「祭」を開催することになりました。\n\n\
-つきましては、昨年大変お世話になりました皆様に２０１８年度オンラインチケット予約のご案内をさせていただきます。\n\n\
-    - オンライン予約されたチケットはすべて10パーセント割引とさせて頂きます\n\
-    - 当日、予約されたチケットは別カウンターにて待ち時間０でお手渡し致します\n\
-    - チケット予約はこちらから https://cmujsa.com/matsuri/tickets/\n\n\
-ご質問等ございましたら rkhorana@cmu.edu (JSA会長) までよろしくお願い致します。\n\n\
-「祭」でお会いしましょう！ \n\n\
-祭ウェブサイト：https://matsuri.cmujsa.com\n\n" % recepientName
 
             msg = create_message(from_addr, to_addr, subject,
                                  bodyEN+textBreak+bodyJP, 'ISO-2022-JP')
