@@ -17,18 +17,16 @@ EMAIL_DATA_FILEPATH = 'Email_Text_Files/email_data.txt'
 ##########################################################
 
 ###### STEPS:
-###### 
-###### 1.) Modify line EMAIL_ADDRESS and PASSWORD above 
-######     --> account has to be configured on gmail to permit 3rd party access
 ######
-###### 2.) Place the CSV file(s) downloaded from PayPal under MatsuriEmail
+###### 1.) Place the CSV file(s) downloaded from PayPal under MatsuriEmail
 ######
-###### 3.) Edit subject
+###### 2.) Edit subject (in "email_data.txt")
 ######
-###### 4.) Edit messages (bodyEN in English and bodyJP in Japanese)
+###### 3.) Edit messages (bodyEN in English and bodyJP in Japanese) (in "email_data.txt")
 ######
-###### 5.) uncomment run() at the very bottom of this file, then run
-
+###### 4.) Uncomment run() at the very bottom of this file, then run
+######
+###### 5.) Input your email username and password when prompted
 
 ###### * TEST WITH YOUR OWN NAME AND EMAIL ADDRESS FIRST!!*
 
@@ -39,6 +37,7 @@ def readFile(path):
     with open(path, "rt") as f:
         return f.read()
 
+# read the email data from "email_data.txt"
 def get_email_data(datafilepath):
     data = readFile(EMAIL_DATA_FILEPATH)
     step1 = data.split('*')
@@ -122,11 +121,13 @@ def run():
             from_addr = EMAIL_ADDRESS
             to_addr = book[recepientName]
             email_data = get_email_data(EMAIL_DATA_FILEPATH)
-            subject = email_data[0]
 
+            # get email subject
+            subject = email_data[0]
+            # get english text and replace the name
             bodyEN = email_data[1]
             bodyEN.replace('RECIPIENT_NAME', recepientName)
-
+            # get japanese text and replace the name
             bodyJP = email_data[2]
             bodyJP.replace('RECIPIENT_NAME', recepientName)
 
