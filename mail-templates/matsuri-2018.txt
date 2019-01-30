@@ -1,8 +1,7 @@
-
-# ########## EMAIL SUBJECT LINE ######### #*
+[email subject]
 Matsuri 2018 Ticket Information //「祭」チケットについて
-*# ########## BODY ENG ############ #*
-Dear RECIPIENT_NAME,
+[body English]
+Dear $RECIPIENT_NAME,
 
 Hello!
 
@@ -23,8 +22,8 @@ We hope you come back and enjoy the event with us!
 
 Matsuri website: https://matsuri.cmujsa.com
 
-*# ######### BODY JP ######### #*
-RECIPIENT_NAME様、
+[body Japanese]
+$RECIPIENT_NAME様、
 
 こんにちは！
 

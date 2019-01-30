@@ -9,10 +9,10 @@ from email.mime.text import MIMEText
 from email.header import Header
 from email.utils import formatdate
 
-EMAIL_ADDRESS = input("Please type your email address username: ")
-PASSWORD      = input("Please type your email password: ")
+emailAddress = input("Please type your email address username: ")
+password      = input("Please type your email password: ")
 
-EMAIL_DATA_FILEPATH = 'Email_Text_Files/email_data.txt'
+matsuriEmailData = 'mail-templates/matsuri-2018.txt'
 
 ##########################################################
 
@@ -20,9 +20,9 @@ EMAIL_DATA_FILEPATH = 'Email_Text_Files/email_data.txt'
 ######
 ###### 1.) Place the CSV file(s) downloaded from PayPal under MatsuriEmail
 ######
-###### 2.) Edit subject (in "email_data.txt")
+###### 2.) Edit subject (in "emailData.txt")
 ######
-###### 3.) Edit messages (bodyEN in English and bodyJP in Japanese) (in "email_data.txt")
+###### 3.) Edit messages (bodyEN in English and bodyJP in Japanese) (in "matsuri-2018.txt")
 ######
 ###### 4.) Uncomment run() at the very bottom of this file, then run
 ######
@@ -37,16 +37,18 @@ def readFile(path):
     with open(path, "rt") as f:
         return f.read()
 
-# read the email data from "email_data.txt"
-def get_email_data(datafilepath):
-    data = readFile(EMAIL_DATA_FILEPATH)
-    step1 = data.split('*')
-    subject = step1[1]
+# read the email data from "emailData.txt"
+def getEmailData(datafilepath):
+    data = readFile(matsuriEmailData)
+    subjectIndex = data.index('[email subject]')
+    engBodyIndex = data.index('[body English]')
+    jpBodyIndex = data.index('[body Japanese]')
     # remove the \n from the subject line
-    subject = subject.replace('\n', '')
-    engBody = step1[3]
+    subject = data[subjectIndex:engBodyIndex]
+    subject = subject.strip()
+    engBody = data[engBodyIndex:jpBodyIndex]
     engBody = engBody.strip() # get rid of trailing whitespace
-    jpBody = step1[5]
+    jpBody = data[jpBodyIndex:]
     jpBody = jpBody.strip() # get rid of trailing whitespace
     return subject, engBody, jpBody
 
@@ -56,7 +58,7 @@ def setup(addressBook, names, emails):
         addressBook[name] = emails[index]
         index += 1
 
-def check_csv():
+def checkCSV():
     ext1 = 'CSV'
     ext2 = 'csv'
     CSV = [i for i in glob.glob('*.{}'.format(ext1))]
@@ -89,25 +91,25 @@ def organize(fileName):
         setup(addressBook, names, emails)
         return addressBook
 
-def create_message(from_addr, to_addr, subject, body, encoding):
+def create_message(fromAddr, toAddr, subject, body, encoding):
     msg = MIMEText(body, 'plain', encoding)
     msg['Subject'] = Header(subject, encoding)
-    msg['From'] = from_addr
-    msg['To'] = to_addr
+    msg['From'] = fromAddr
+    msg['To'] = toAddr
     msg['Date'] = formatdate()
     return msg
 
-def send_via_gmail(from_addr, to_addr, msg):
+def send_via_gmail(fromAddr, toAddr, msg):
     s = smtplib.SMTP('smtp.gmail.com', 587)
     s.ehlo()
     s.starttls()
     s.ehlo()
-    s.login(EMAIL_ADDRESS, PASSWORD)
-    s.sendmail([from_addr], [to_addr], msg.as_string())
+    s.login(emailAddress, password)
+    s.sendmail([fromAddr], [toAddr], msg.as_string())
     s.close()
 
 def run():
-    data = check_csv()
+    data = checkCSV()
     if(data == ""):
         print("No file found in directory")
         return 
@@ -118,24 +120,24 @@ def run():
                 print("ecountered NONE name!")
                 continue # for errors
 
-            from_addr = EMAIL_ADDRESS
-            to_addr = book[recepientName]
-            email_data = get_email_data(EMAIL_DATA_FILEPATH)
+            fromAddr = emailAddress
+            toAddr = book[recepientName]
+            emailData = getEmailData(matsuriEmailData)
 
             # get email subject
-            subject = email_data[0]
+            subject = emailData[0]
             # get english text and replace the name
-            bodyEN = email_data[1]
-            bodyEN.replace('RECIPIENT_NAME', recepientName)
+            bodyEN = emailData[1]
+            bodyEN.replace('$RECIPIENT_NAME', recepientName)
             # get japanese text and replace the name
-            bodyJP = email_data[2]
-            bodyJP.replace('RECIPIENT_NAME', recepientName)
+            bodyJP = emailData[2]
+            bodyJP.replace('$RECIPIENT_NAME', recepientName)
 
             textBreak = "---------------------------------------------------------------------------------\n\n"
 
-            msg = create_message(from_addr, to_addr, subject,
+            msg = create_message(fromAddr, toAddr, subject,
                                  bodyEN+textBreak+bodyJP, 'ISO-2022-JP')
-            send_via_gmail(from_addr, to_addr, msg)
+            send_via_gmail(fromAddr, toAddr, msg)
             print (recepientName + "  sent!")
 
 # run()
